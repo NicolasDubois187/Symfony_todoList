@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 
 class TasksController extends AbstractController
@@ -17,9 +18,8 @@ class TasksController extends AbstractController
     #[Route('/tasks', name: 'tasks', methods: ['GET'])]
     public function tasks (TaskRepository $tasksRepository):Response
     {
-        $tasks = $tasksRepository->findBy(['done' => true]);
+        $tasks = $tasksRepository->findBy(['done' => true], ['taskLimit' => 'ASC']);
         $tasksDone = $tasksRepository->findBy(['done' => false]);
-
 
         return $this->render('tasks/tasks.html.twig', [
             'tasks' => $tasks,
@@ -67,15 +67,23 @@ class TasksController extends AbstractController
     }
 
     #[Route('/taskAdd', name: 'taskAdd', methods: ['GET', 'POST'])]
-    function addTask (Request $request, TaskRepository $taskRepository):Response
+    public function addTask (Request $request, TaskRepository $taskRepository, SluggerInterface $slugger ):Response
     {
         $task = new Task();
-        $now = date('H:i:s \O\n d/m/Y');
+        $now = new \DateTime('now');
         $form = $this->createForm(TaskType::class, $task);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $task->setCreation(new \DateTime('now'))
-                ->setDone(true);
+            $file = $form->get('image')->getData();
+            $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+            $safeFilename = $slugger->slug($originalFilename);
+           // $fileName = md5(uniqid()) . '.' . $file->guessExtension();
+            $fileName = $safeFilename.'-'.uniqid().'.'.$file->guessExtension();
+            $file->move($this->getParameter('pathUpload_directory'), $fileName);
+
+            $task->setCreation($now)
+                ->setDone(true)
+                ->setImage($fileName);
             $taskRepository->add($task);
             return $this->redirectToRoute('tasks');
         }

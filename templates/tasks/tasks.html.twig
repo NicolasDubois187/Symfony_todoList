@@ -13,10 +13,14 @@
             <span class="type">Type : {{ task.type }}</span>
             <span class="description">Description : {{ task.description }}</span>
             <span class="creation">A fire depuis le : {{ task.creation | format_date('short', locale='fr') }}</span>
-            <span class="task_limit">A faire pour le : {{ task.taskLimit | format_date('short', locale='fr') }}</span>
+            {% if task.type == 'RDV' %}
+                <span class="task_limit">Rendez-vous le : {{ task.taskLimit | format_date('short', locale='fr') }}</span>
+            {% else %}
+                <span class="task_limit">A faire pour le : {{ task.taskLimit | format_date('short', locale='fr') }}</span>
+            {% endif %}
         </div>
         <div class="centerTasks">
-            <span class="image">{{ task.image }}</span>
+            <img src="../public/upload_directory/{{ task.image }}" alt="">
         </div>
         <div class="rightTasks">
             <a href="{{ path('task', {'id' : task.id}) }}">Voir fiche tâche</a>
@@ -77,6 +81,9 @@
     }
     .rightTasks {
         gap: 10px;
+    }
+    img {
+        max-width: 50%;
     }
 
 
