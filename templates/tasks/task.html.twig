@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+{% block title %} Task {% endblock %}
+{% block body %}
+
+<main>
+    <h1>Fiche tâche</h1>
+    <a href="{{ path('tasks') }}">retour vers liste des tâches</a>
+
+    <div class="taskContainer">
+        <div class="left">
+            <h2 class="name">Nom : {{ task.name }}</h2>
+            <span class="type">type : {{ task.type }}</span>
+            <span class="description">Description : {{ task.description }}</span>
+            <span class="creation">A faire depuis le : {{ task.creation | format_date('short', locale='fr') }}</span>
+            <span class="task_limit">A faire pour la : {{ task.taskLimit | format_date('short', locale='fr') }}</span>
+        </div>
+        <div class="right">
+            <span class="image">{{ task.image }}</span>
+        </div>
+    </div>
+</main>
+<style>
+    .taskContainer {
+        display: grid;
+        grid-template-columns: 70% 1fr;
+        border: solid 1px black;
+        max-width: 80%;
+        margin: 10px auto;
+        padding: 10px;
+        gap: 10px;
+    }
+    .left {
+        display: grid;
+    }
+    .right {
+        display: flex;
+        justify-content: center;
+        text-align: center;
+        align-items: center;
+
+    }
+</style>
+
+{% endblock %}

@@ -1,0 +1,85 @@
+{% extends 'base.html.twig' %}
+{% block title %} Task List {% endblock %}
+{% block body %}
+
+<main>
+    <h1>Les Tâches</h1>
+    <a href="{{ path('home') }}">retour à l'accueil</a>
+    <h2>Tâches à faire</h2>
+        {% for task in tasks %}
+    <div class="tasksContainer1">
+        <div class="leftTasks">
+            <h2 class="name">Nom : {{ task.name }}</h2>
+            <span class="type">Type : {{ task.type }}</span>
+            <span class="description">Description : {{ task.description }}</span>
+            <span class="creation">A fire depuis le : {{ task.creation | format_date('short', locale='fr') }}</span>
+            <span class="task_limit">A faire pour le : {{ task.taskLimit | format_date('short', locale='fr') }}</span>
+        </div>
+        <div class="centerTasks">
+            <span class="image">{{ task.image }}</span>
+        </div>
+        <div class="rightTasks">
+            <a href="{{ path('task', {'id' : task.id}) }}">Voir fiche tâche</a>
+            <a href="{{ path('taskUpdate', {'id' : task.id}) }}">Modifier</a>
+            <a href="{{ path('changeStatus', {'id' : task.id}) }}"><img src="./../assets/img/cross.svg" alt=""></a>
+        </div>
+
+    </div>
+        {% endfor %}
+
+        <h2>Tâches terminées</h2>
+
+        {% for task in tasksDone %}
+    <div class="tasksContainer2">
+        <div class="leftTasks">
+            <h2 class="name">Nom : {{ task.name }}</h2>
+            <span class="type">Type : {{ task.type }}</span>
+            <span class="description">Description : {{ task.description }}</span>
+            <span class="creation">A faire depuis le : {{ task.creation | format_date('short', locale='fr') }}</span>
+            <span class="task_limit">A faire pour le : {{ task.taskLimit | format_date('short', locale='fr') }}</span>
+        </div>
+        <div class="centerTasks">
+            <span class="image">{{ task.image }}</span>
+        </div>
+        <div class="rightTasks">
+            <a href="{{ path('task', {'id' : task.id}) }}">Voir fiche tâche</a>
+            <a href="{{ path('taskUpdate', {'id' : task.id}) }}">Modifier</a>
+            <a href="{{ path('changeStatus', {'id' : task.id}) }}"><img src="./../assets/img/uparrow.svg" alt=""></a>
+            <a href="{{ path('deleteTask', {'id' : task.id}) }}"><img src="./../assets/img/garbage.svg" alt=""></a>
+
+        </div>
+    </div>
+        {% endfor %}
+    <h2>Ajouter une tâche</h2>
+    <a href="{{ path('taskAdd') }}"><button>Ajouter une tâche</button></a>
+
+</main>
+<style>
+    .tasksContainer1 {
+        display: grid;
+        grid-template-columns: 40% 1fr 1fr;
+        align-items: center;
+        border: solid 1px black;
+        padding: 10px;
+    }
+    .tasksContainer2 {
+        display: grid;
+        grid-template-columns: 40% 1fr 1fr;
+        align-items: center;
+        border: solid 1px black;
+        padding: 10px;
+    }
+    .leftTasks, .rightTasks {
+        display: grid;
+    }
+    .leftTasks, .rightTasks, .centerTasks {
+
+    }
+    .rightTasks {
+        gap: 10px;
+    }
+
+
+</style>
+
+{% endblock %}

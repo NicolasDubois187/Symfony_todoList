@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+{% block title %} Task Add {% endblock %}
+{% block body %}
+
+<main>
+    <h1>Créer une tâche</h1>
+    <a href="{{ path('tasks') }}">retour à la liste des tâches</a>
+    <div>
+        {{ form(taskForm) }}
+    </div>
+
+</main>
+    <style>
+        form {
+
+            align-items: center;
+            border: solid 1px black;
+            padding: 10px;
+            margin: 10px;
+        }
+        #task {
+            display: grid;
+            gap: 10px;
+            justify-content: space-around;
+        }
+
+    </style>
+
+{% endblock %}

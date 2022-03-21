@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+{% block title %} update Task {% endblock %}
+{% block body %}
+
+<main>
+    <h1>Modifier tâche : {{ task.name }}</h1>
+    <a href="{{ path('tasks') }}">retour vers liste des tâches</a>
+
+    <div class="form">
+        {{ form_start(taskForm) }}
+        <div class="left">
+            {{ form_label(taskForm.name) }}
+            {{ form_widget(taskForm.name, { 'attr' : {'class':'toto' }}) }}
+            {{ form_errors(taskForm.name)}}
+
+            {{ form_label(taskForm.type) }}
+            {{ form_widget(taskForm.type, { 'attr' : {'class':'toto' }}) }}
+            {{ form_errors(taskForm.type)}}
+
+            {{ form_label(taskForm.description) }}
+            {{ form_widget(taskForm.description, { 'attr' : {'class':'toto' }}) }}
+            {{ form_errors(taskForm.description)}}
+
+        </div>
+        <div class="right">
+            {{ form_label(taskForm.image) }}
+            {{ form_widget(taskForm.image, { 'attr' : {'class':'toto' }}) }}
+            {{ form_errors(taskForm.image)}}
+
+            {{ form_label(taskForm.taskLimit) }}
+            {{ form_widget(taskForm.taskLimit, { 'attr' : {'class':'toto' }}) }}
+            {{ form_errors(taskForm.taskLimit)}}
+
+        </div>
+        <div class="btn">
+            {{ form_label(taskForm.envoyer) }}
+            {{ form_widget(taskForm.envoyer, { 'attr' : {'class':'toto' }}) }}
+        </div>
+    </div>
+    {{ form_end(taskForm) }}
+</main>
+<style>
+    form {
+        display: grid;
+        grid-template-columns: 40% 1fr 1fr;
+        align-items: center;
+        border: solid 1px black;
+        padding: 10px;
+        margin: 10px;
+        gap: 10px;
+    }
+    .left, .right {
+        display: grid;
+        gap: 10px;
+        justify-content: space-around;
+    }
+    .btn {
+        align-items: center;
+        text-align: center;
+    }
+</style>
+
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+{% block title %} Todo_list homepage {% endblock %}
+{% block body %}
+    {% include 'commons/_header.html.twig' %}
+    <main>
+        <h1>Home page</h1>
+        <a href="{{ path('tasks') }}">Aller voir les actions à réaliser</a>
+    </main>
+    {% include 'commons/_footer.html.twig' %}
+{% endblock %}
