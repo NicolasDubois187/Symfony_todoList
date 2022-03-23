@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Picture;
 use App\Form\PictureType;
 use App\Repository\PictureRepository;
+use App\Repository\TypeRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,23 +15,32 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 class PicturesController extends AbstractController
 {
     #[Route ('/pictures', name: 'pictures', methods: ['GET'])]
-    public function pictures(PictureRepository $pictureRepository): Response
+    public function pictures(PictureRepository $pictureRepository, TypeRepository $typeRepository): Response
     {
         $pictures = $pictureRepository->findBy([], ['type' => 'ASC']);
-
-        return $this->render('pictures/pictures.html.twig', [
-            'pictures' => $pictures
-        ]);
-    }
-    #[Route('/pictureByNameAndType', name: 'pictureByNameAndType', methods: ['GET'])]
-        public function pictureByNameAndType (Request $request, PictureRepository $pictureRepository)
-    {
-        $name =$request->query->get('name');
-        $description =$request->query->get('description');
-        $pictures = $pictureRepository->findBy(['name' => $name, 'description' => $description]);
+        $types = $typeRepository->findAll();
 
         return $this->render('pictures/pictures.html.twig', [
             'pictures' => $pictures,
+            'types' => $types
+        ]);
+    }
+    #[Route('/pictureByNameAndType', name: 'pictureByNameAndType', methods: ['GET'])]
+        public function pictureByNameAndType (
+            Request $request,
+            PictureRepository $pictureRepository,
+            TypeRepository $typeRepository
+             )
+    {
+        $name =$request->query->get('name');
+        $description =$request->query->get('description');
+        $type = $request->query->get('type');
+        //$pictures = $pictureRepository->findBy(['name' => $name, 'description' => $description], ['date' => 'ASC']);
+        $pictures = $pictureRepository->getPictureByNameAndType($name, $description, $type);
+        $types = $typeRepository->findAll();
+        return $this->render('pictures/pictures.html.twig', [
+            'pictures' => $pictures,
+            'types' => $types
         ]);
     }
 

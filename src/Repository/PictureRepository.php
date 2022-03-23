@@ -44,9 +44,36 @@ class PictureRepository extends ServiceEntityRepository
             $this->_em->flush();
         }
     }
-    public function getPictureByNameAndType($name)
+    public function getPictureByNameAndType($name, $description, $type)
     {
+        $queryBuilder = $this->createQueryBuilder('pictures')
 
+            ->select('pictures')
+            ->leftJoin('pictures.type', 'type')
+            ->addSelect('type')
+            ;
+            if ($name) {
+                $queryBuilder
+                ->where('pictures.name LIKE :name')
+                ->setParameter('name', '%' . $name . '%');
+            }
+            if ($description) {
+                $queryBuilder
+                ->andWhere('pictures.description LIKE :description')
+                ->setParameter('description', '%' . $description . '%');
+            }
+            if ($type) {
+                $queryBuilder
+                    ->andWhere('type.name LIKE :type')
+                    ->setParameter('type', '%' . $type . '%');
+
+            }
+            $query = $queryBuilder
+            ->orderBy('pictures.date', 'DESC')
+            ->getQuery()
+        ;
+        $pictures = $query->getArrayResult();
+        return $pictures;
     }
 
     // /**
