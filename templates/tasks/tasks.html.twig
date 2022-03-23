@@ -4,8 +4,13 @@
 
 <main>
     <h1>Les Tâches</h1>
+    <form action="{{ path('taskByType') }}" method="GET">
+        <input type="text" name="type" id="type" value="" placeholder="chercher">
+        <input type="submit" value="rechercher">
+    </form>
     <a href="{{ path('home') }}">retour à l'accueil</a>
     <h2>Tâches à faire</h2>
+
         {% for task in tasks %}
     <div class="tasksContainer1">
         <div class="leftTasks">
@@ -84,6 +89,10 @@
     }
     img {
         max-width: 50%;
+    }
+    form {
+        display: flex;
+        margin: 10px;
     }
 
 

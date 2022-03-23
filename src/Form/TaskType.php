@@ -34,7 +34,7 @@ class TaskType extends AbstractType
             ->add('description', TextType::class, [
                 'label' => 'description'
             ])
-            ->add('image', FileType::class, [('data_class' => null)] [
+            ->add('image', FileType::class, [
                 'label' => 'illustration',
                 'constraints' => [
                     new NotBlank([

@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+{% block title %} Task List {% endblock %}
+{% block body %}
+
+<main>
+    <h1>Les pictures</h1>
+    <form action="{{ path('pictureByNameAndType') }}" method="GET">
+        <input type="text" name="name" id="name" value="" placeholder="name">
+        <input type="text" name="description" id="description" value="" placeholder="description">
+        <input type="submit" value="rechercher">
+
+    </form>
+    {% for picture in pictures %}
+        <div class="pictures">
+            <div class="picturesContainer">
+                <h2 class="name">Nom : {{ picture.name }}</h2>
+                <span class="description">Description : {{ picture.description }}</span>
+                <span class="date">prise le : {{ picture.date | format_date('short', locale='fr') }}</span>
+                <span class="type">Type : {{ picture.type.name }}</span>
+            </div>
+            <div class="picturesImg">
+                <img src="../public/upload_directory/{{ picture.media.name }}" alt="{{ picture.media.alt }}">
+            </div>
+        </div>
+    {% endfor %}
+    <h2>Ajouter une picture</h2>
+    <a href="{{ path('addPicture') }}"><button>Ajouter une picture</button></a>
+</main>
+<style>
+    .pictures {
+        display: grid;
+        grid-template-columns: 60% 1fr;
+        gap: 10px;
+        margin: 10px;
+        padding: 10px;
+        border: solid 2px black;
+    }
+    .picturesContainer {
+        display: grid;
+    }
+    img {
+        max-width: 50%;
+    }
+    form {
+        display: flex;
+    }
+</style>
+
+{% endblock %}

@@ -2,30 +2,30 @@
 
 namespace App\Repository;
 
-use App\Entity\Task;
+use App\Entity\Type;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method Task|null find($id, $lockMode = null, $lockVersion = null)
- * @method Task|null findOneBy(array $criteria, array $orderBy = null)
- * @method Task[]    findAll()
- * @method Task[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Type|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Type|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Type[]    findAll()
+ * @method Type[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class TaskRepository extends ServiceEntityRepository
+class TypeRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Task::class);
+        parent::__construct($registry, Type::class);
     }
 
     /**
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function add(Task $entity, bool $flush = true): void
+    public function add(Type $entity, bool $flush = true): void
     {
         $this->_em->persist($entity);
         if ($flush) {
@@ -37,28 +37,16 @@ class TaskRepository extends ServiceEntityRepository
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function remove(Task $entity, bool $flush = true): void
+    public function remove(Type $entity, bool $flush = true): void
     {
         $this->_em->remove($entity);
         if ($flush) {
             $this->_em->flush();
         }
     }
-    public function getTaskByType($type)
-    {
-        $queryBuilder = $this->createQueryBuilder('tasks');
-        $query = $queryBuilder
-            ->select('tasks')
-            ->where('tasks.type LIKE :type')
-            ->setParameter('type', '%' . $type . '%')
-            ->getQuery()
-            ;
-        $tasks = $query->getArrayResult();
-        return $tasks;
-    }
 
     // /**
-    //  * @return Task[] Returns an array of Task objects
+    //  * @return Type[] Returns an array of Type objects
     //  */
     /*
     public function findByExampleField($value)
@@ -75,7 +63,7 @@ class TaskRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?Task
+    public function findOneBySomeField($value): ?Type
     {
         return $this->createQueryBuilder('t')
             ->andWhere('t.exampleField = :val')

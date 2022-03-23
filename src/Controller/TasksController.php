@@ -26,6 +26,18 @@ class TasksController extends AbstractController
             'tasksDone' => $tasksDone
         ]);
     }
+    #[Route('/taskByType', name: 'taskByType', methods: ['GET'])]
+    public function getTaskByType(Request $request, TaskRepository $taskRepository)
+    {
+        $type =$request->query->get('type');
+        //$tasks = $taskRepository->findBy(['type' => $type], ['taskLimit' => 'ASC']);
+        $tasks = $taskRepository->getTaskByType($type);
+        $tasksDone = [];
+        return $this->render('tasks/tasks.html.twig', [
+            'tasks' => $tasks,
+            'tasksDone' => $tasksDone
+            ]);
+    }
 
     #[Route('/task/{id}', name: 'task', methods: ['GET'])]
     public function task (TaskRepository $taskRepository, $id)
@@ -78,6 +90,7 @@ class TasksController extends AbstractController
             $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
             $safeFilename = $slugger->slug($originalFilename);
            // $fileName = md5(uniqid()) . '.' . $file->guessExtension();
+
             $fileName = $safeFilename.'-'.uniqid().'.'.$file->guessExtension();
             $file->move($this->getParameter('pathUpload_directory'), $fileName);
 

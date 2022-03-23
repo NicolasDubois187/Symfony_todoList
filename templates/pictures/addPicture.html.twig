@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+{% block title %} Task Add {% endblock %}
+{% block body %}
+    <main>
+        <h1>Créer une picture</h1>
+        <a href="{{ path('pictures') }}">retour à la liste des pictures</a>
+        <div>
+            {{ form(pictureForm) }}
+        </div>
+
+    </main>
+    <style>
+        form {
+
+            align-items: center;
+            border: solid 1px black;
+            padding: 10px;
+            margin: 10px auto;
+            max-width: 70%;
+        }
+        #picture {
+            display: grid;
+            gap: 10px;
+            justify-content: space-around;
+        }
+
+    </style>
+
+{% endblock %}
