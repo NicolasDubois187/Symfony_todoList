@@ -51,6 +51,8 @@ class PictureRepository extends ServiceEntityRepository
             ->select('pictures')
             ->leftJoin('pictures.type', 'type')
             ->addSelect('type')
+            ->leftJoin('pictures.media', 'media')
+            ->addSelect('media')
             ;
             if ($name) {
                 $queryBuilder

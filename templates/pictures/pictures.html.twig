@@ -24,10 +24,12 @@
                 <h2 class="name">Nom : {{ picture.name }}</h2>
                 <span class="description">Description : {{ picture.description }}</span>
                 <span class="date">prise le : {{ picture.date | format_date('short', locale='fr') }}</span>
-                {# <span class="type">Type : {{ picture.type.name }}</span> #}
+                <span class="type">Type : {{ picture.type.name }}</span>
             </div>
             <div class="picturesImg">
-                {#  <img src="../public/upload_directory/{{ picture.media.name }}" alt="{{ picture.media.alt }}">#}
+                {% if picture.media %}
+                <img src="../public/upload_directory/{{ picture.media.name }}" alt="{{ picture.media.alt }}">
+                {% endif %}
             </div>
         </div>
     {% endfor %}

@@ -6,7 +6,6 @@ namespace App\Form;
 use App\Entity\Picture;
 use App\Entity\Type;
 use Symfony\Component\Form\AbstractType;
-
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
@@ -31,9 +30,9 @@ class PictureType extends AbstractType
                 'label' => 'description'
             ])
             ->add('mediaFilename', FileType::class, [
-                'label' => 'Media',
-                'mapped' => false,
-                'required' => false
+               'label' => 'Media',
+//               'mapped' => false,
+//               'required' => false
             ])
             ->add('envoyer', SubmitType::class)
         ;

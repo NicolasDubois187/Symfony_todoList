@@ -36,10 +36,10 @@ class TaskType extends AbstractType
             ])
             ->add('image', FileType::class, [
                 'label' => 'illustration',
+                'mapped' => false,
+                'required' => false,
                 'constraints' => [
-                    new NotBlank([
-                        'message' => 'renseigner le champ'
-                    ]),
+
                     new File([
                         'maxSize' => '3M',
                         'mimeTypesMessage' => 'Format invalide'

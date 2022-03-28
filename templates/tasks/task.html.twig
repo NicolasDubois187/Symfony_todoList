@@ -15,7 +15,7 @@
             <span class="task_limit">A faire pour la : {{ task.taskLimit | format_date('short', locale='fr') }}</span>
         </div>
         <div class="right">
-            <span class="image">{{ task.image }}</span>
+            <img src="{{ asset('upload_directory/' ~ task.image) }}"{{ task.image }}" alt="">
         </div>
     </div>
 </main>

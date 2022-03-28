@@ -100,18 +100,33 @@ class TasksController extends AbstractController
             $taskRepository->add($task);
             return $this->redirectToRoute('tasks');
         }
+
         return $this->render('tasks/taskAdd.html.twig', ['taskForm' => $form->createView()]);
     }
 
 
     #[Route('updateTask/{id}', name: 'taskUpdate', methods: ['GET', 'POST'])]
-    public function taskUpdate($id, TaskRepository $taskRepository, Request $request)
+    public function taskUpdate($id, TaskRepository $taskRepository, Request $request, SluggerInterface $slugger)
     {
         $task = $taskRepository->findOneBy(["id" => $id]);
         $form = $this->createForm(TaskType::class, $task);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $taskRepository->add($task);
+            if ($form->get('image')->getData()) {
+                $file = $form->get('image')->getData();
+                $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeFilename = $slugger->slug($originalFilename);
+                // $fileName = md5(uniqid()) . '.' . $file->guessExtension();
+
+                $fileName = $safeFilename . '-' . uniqid() . '.' . $file->guessExtension();
+                $file->move($this->getParameter('pathUpload_directory'), $fileName);
+
+                $task->setDone(true)
+                    ->setImage($fileName);
+                $taskRepository->add($task);
+            } else {
+                $taskRepository->add($task);
+            }
             return $this->redirectToRoute('tasks');
         }
         return $this->render('tasks/updateTask.html.twig', [

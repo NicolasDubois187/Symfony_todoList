@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Media;
 use App\Entity\Picture;
 use App\Form\PictureType;
+use App\Repository\MediaRepository;
 use App\Repository\PictureRepository;
 use App\Repository\TypeRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -22,7 +24,8 @@ class PicturesController extends AbstractController
 
         return $this->render('pictures/pictures.html.twig', [
             'pictures' => $pictures,
-            'types' => $types
+            'types' => $types,
+
         ]);
     }
     #[Route('/pictureByNameAndType', name: 'pictureByNameAndType', methods: ['GET'])]
@@ -45,27 +48,31 @@ class PicturesController extends AbstractController
     }
 
     #[Route ('/addPicture', name: 'addPicture', methods: ['GET', 'POST'])]
-    public function addPicture(Request $request, PictureRepository $pictureRepository, SluggerInterface $slugger ): Response
+    public function addPicture(Request $request, PictureRepository $pictureRepository, SluggerInterface $slugger): Response
     {
         $picture = new Picture();
+        $media = new Media();
+
         $now = new \DateTime('now');
         $form = $this->createForm(PictureType::class, $picture);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $mediaFile = $form->get('media')->getData();
+            $mediaFile = $form->get('mediaFilename')->getData();
             if($mediaFile) {
                 $originalFilename = pathinfo($mediaFile->getClientOriginalName(), PATHINFO_FILENAME);
                 $safeFilename = $slugger->slug($originalFilename);
                 $newFilename = $safeFilename. '-' .uniqid().'.'.$mediaFile->guessExtension();
                 $mediaFile->move(
-                    $this->getParameter('pathUpload_directory'),
+                    $this->getParameter('pathUpload_directory'), $newFilename
                 );
-                $picture->setMediaFilename($newFilename);
+                $media->setName($newFilename);
+                $picture->setMedia($media);
+
             }
 
             $picture->setDate($now);
             $pictureRepository->add($picture);
-            dd($picture);
+
             return $this->redirectToRoute('pictures');
         }
 

@@ -19,6 +19,7 @@ class Media
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $alt;
 
+
     public function getId(): ?int
     {
         return $this->id;
